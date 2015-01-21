@@ -1,0 +1,46 @@
+Car MPG Prediction
+========================================================
+author: Sisi
+date: 
+
+Introduction
+========================================================
+
+This data product is to predict the fuel comsuption for given car parameters such as:
+
+- Weight
+- Transmission
+- 1/4 mile time
+
+Data
+========================================================
+The model was built on the data mtcars. The data was extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973-74 models).
+
+The variables are shown below, for more detail of the data, please enter ?mtcars
+
+```{r,echo= F}
+data(mtcars)
+names(mtcars)
+```
+
+Regression Model
+========================================================
+A step-wise regression was performed to choose the primary variables:
+```{r, results ='hide'}
+model <- step(lm(mpg ~ ., data = mtcars)) 
+model$coefficients
+```
+
+The final model is mpg ~ hp + wt + qsec + am
+```{r, echo = F}
+model$coefficients
+```
+
+MPG Prediction
+========================================================
+The fuel comsumption (mpg) could be predicted by the below function:
+```{r}
+coef <- summary(model)$coef
+mpg <- function(wt, am, qsec){
+      coef[1,1] +  wt * coef[2,1] + qsec * coef[3,1]+ am * coef[4,1]}
+```
